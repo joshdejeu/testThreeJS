@@ -39,7 +39,6 @@ camera.lookAt(0, 0, 0)
 scene.add(cube);
 scene.add(ground);
 
-window.addEventListener
 
 window.addEventListener('keydown', (event) => {
     if (event.key === 'w' || event.key === 'ArrowUp') cube.velocity.z = -0.1;
@@ -65,6 +64,8 @@ window.addEventListener('resize', () => {
 function animate() {
     const deltaTime = clock.getDelta(); // Get the time since the last frame
     cube.update(ground);
+
+    camera.lookAt(cube.position)
 
     renderer.render(scene, camera);
     requestAnimationFrame(animate);

@@ -1,5 +1,13 @@
 import * as THREE from 'three';
 
+function checkBoxCollision({ box1, box2 }) {
+    const xCollision = box1.right >= box2.left && box1.left <= box2.right;
+    const yCollision = box1.bottom + box1.velocity.y <= box2.top && box1.top >= box2.bottom;
+    const zCollision = box1.front >= box2.back && box1.back <= box2.front;
+    return xCollision && yCollision && zCollision;
+}
+
+
 export class Cube extends THREE.Mesh {
     constructor({
         width,
@@ -31,13 +39,7 @@ export class Cube extends THREE.Mesh {
         this.velocity = velocity;
         this.gravity = -0.01;
     }
-    generateCube(scene) {
-        // const cube = new THREE.Mesh(geometry, material);
-        // cube.position.set(0, 1, 0)
-        // cube.castShadow = true;
-        // scene.add(cube)
-        // return cube;
-    }
+
     updateSides() {
         this.right = this.position.x + this.width / 2;
         this.left = this.position.x - this.width / 2;
@@ -51,22 +53,15 @@ export class Cube extends THREE.Mesh {
 
         this.position.x += this.velocity.x
         this.position.z += this.velocity.z
-        const zCollision = this.front >= ground.back && this.back <= ground.front;
-        const xCollision = this.right >= ground.left && this.left <= ground.right;
-        if (zCollision && xCollision) {
-            console.log('test')
-        }
 
         this.applyGravity(ground);
     }
     applyGravity(ground) {
         this.velocity.y += this.gravity;
-        // Hits the ground : invert velocity
-        if (this.bottom + this.velocity.y <= ground.top) {
+        //ground hit
+        if (checkBoxCollision({ box1: this, box2: ground })) {
             this.velocity.y *= 0.8;
             this.velocity.y = -this.velocity.y;
-        }
-        // Falling through the air : increase velocity
-        else this.position.y += this.velocity.y
+        }else this.position.y += this.velocity.y;
     }
 }
