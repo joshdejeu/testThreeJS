@@ -24,9 +24,9 @@ export class Cube extends THREE.Mesh {
         this.height = height;
         this.depth = depth;
 
-        this.position.set(position.x, position.y, position.z)
-        this.top = this.position.y + this.height / 2;
-        this.bottom = this.position.y - this.height / 2;
+        this.position.set(position.x, position.y, position.z);
+
+        this.updateSides();
 
         this.velocity = velocity;
         this.gravity = -0.01;
@@ -38,18 +38,29 @@ export class Cube extends THREE.Mesh {
         // scene.add(cube)
         // return cube;
     }
-    update(ground) {
+    updateSides() {
+        this.right = this.position.x + this.width / 2;
+        this.left = this.position.x - this.width / 2;
         this.top = this.position.y + this.height / 2;
         this.bottom = this.position.y - this.height / 2;
+        this.front = this.position.z + this.depth / 2;
+        this.back = this.position.z - this.depth / 2;
+    }
+    update(ground) {
+        this.updateSides();
 
-        this.velocity.y += this.gravity;
-        this.applyGravity(ground);
         this.position.x += this.velocity.x
-        this.velocity.x *= 0.9;
         this.position.z += this.velocity.z
-        this.velocity.z *= 0.9;
+        const zCollision = this.front >= ground.back && this.back <= ground.front;
+        const xCollision = this.right >= ground.left && this.left <= ground.right;
+        if (zCollision && xCollision) {
+            console.log('test')
+        }
+
+        this.applyGravity(ground);
     }
     applyGravity(ground) {
+        this.velocity.y += this.gravity;
         // Hits the ground : invert velocity
         if (this.bottom + this.velocity.y <= ground.top) {
             this.velocity.y *= 0.8;

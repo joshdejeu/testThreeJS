@@ -39,18 +39,20 @@ camera.lookAt(0, 0, 0)
 scene.add(cube);
 scene.add(ground);
 
+window.addEventListener
+
 window.addEventListener('keydown', (event) => {
-    if (event.key === 'w') cube.velocity.z -= 0.1;
-    if (event.key === 's') cube.velocity.z += 0.1;
-    if (event.key === 'a') cube.velocity.x -= 0.1;
-    if (event.key === 'd') cube.velocity.x += 0.1;
-    if (event.keyCode === 32) cube.velocity.y += 0.1;
+    if (event.key === 'w' || event.key === 'ArrowUp') cube.velocity.z = -0.1;
+    if (event.key === 's' || event.key === 'ArrowDown') cube.velocity.z = 0.1;
+    if (event.key === 'a' || event.key === 'ArrowLeft') cube.velocity.x = -0.1;
+    if (event.key === 'd' || event.key === 'ArrowRight') cube.velocity.x = 0.1;
+    if (event.keyCode === 32) cube.velocity.y = 0.25;
 })
 window.addEventListener('keyup', (event) => {
-    if (event.key === 'w') cube.velocity.z += 0.1;
-    if (event.key === 's') cube.velocity.z -= 0.1;
-    if (event.key === 'a') cube.velocity.x += 0.1;
-    if (event.key === 'd') cube.velocity.x -= 0.1;
+    if (event.key === 'w' || event.key === 'ArrowUp') cube.velocity.z = 0;
+    if (event.key === 's' || event.key === 'ArrowDown') cube.velocity.z = 0;
+    if (event.key === 'a' || event.key === 'ArrowLeft') cube.velocity.x = 0;
+    if (event.key === 'd' || event.key === 'ArrowRight') cube.velocity.x = 0;
 })
 
 // Resize handling for window resizing
